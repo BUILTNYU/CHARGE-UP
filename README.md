@@ -2,18 +2,20 @@
 
 **C**arshare **H**ierarchical **A**llocation and **R**ebalancing with **G**raph-**E**xpanded charging, **U**sing **P**-median
 
-CHARGE-UP is a Python implementation of the non-myopic rebalancing policy for one-way electric-vehicle (EV) carsharing fleets proposed in:
+CHARGE-UP is a Python implementation of a non-myopic fleet management algorithm for electric mobility-on-demand (MOD) services. It decides where to reposition idle electric vehicles and how much to charge them when charging stations have limited capacity. It was proposed in:
 
 > Pantelidis, T.P., Li, L., Ma, T.-Y., Chow, J.Y.J., & Jabari, S.E.G. (2022). A Node-Charge Graph-Based Online Carshare Rebalancing Policy with Capacitated Electric Charging. *Transportation Science* 56(3), 654–676. https://doi.org/10.1287/trsc.2021.1058
 
-At each rebalancing interval the operator decides where to send each idle EV and how much to charge it. The policy is a cost function approximation (CFA): a *p*-median relocation model on a **node-charge graph**. Each zone is copied once per discrete charge level. Vehicles move between zones within a level and move up a level by using a charger. The model includes:
+The paper tests the method on a one-way carsharing fleet, but the formulation applies to any MOD fleet whose idle vehicles must be repositioned and recharged to serve uncertain, spatially distributed demand. Examples include ride-hailing, robotaxi, microtransit and carsharing services.
 
-- **Customer access cost.** Customers can pick up a vehicle in a different zone, as long as it has at least the charge level they need.
+At each rebalancing interval the operator decides where to send each idle vehicle and how much to charge it. The policy is a cost function approximation (CFA): a *p*-median relocation model on a **node-charge graph**. Each zone is copied once per discrete charge level. Vehicles move between zones within a level and move up a level by using a charger. The model includes:
+
+- **Access cost.** A request in one zone can be served by a vehicle in another zone, as long as the vehicle has at least the charge level the trip needs. Depending on the service, this cost is the customer's walk to the vehicle or the vehicle's pickup trip to the customer.
 - **Queueing-based reliability** (Marianov & ReVelle, 1996). This anticipates stochastic demand, which makes the policy non-myopic.
 - **Charging-station capacity**, counted as charging *paths* through each station rather than as flow on individual links.
 - **Minimum-cost-flow routing** of the relocated vehicles.
 
-Please refer to the paper for the full methodology, the online simulation and the Brooklyn (BMW ReachNow) case study. This repository has the single-interval optimization that the policy solves at each rebalancing step.
+Please refer to the paper for the full methodology, the online simulation and the case study (a one-way carsharing fleet in Brooklyn, based on BMW ReachNow data). This repository has the single-interval optimization that the policy solves at each rebalancing step.
 
 The code is written in Python (≥ 3.9) and needs only NumPy and SciPy. The exact model is solved with the open-source HiGHS solver that ships with SciPy, so no commercial solver license is needed. Matplotlib is optional and only used for plotting.
 
@@ -74,7 +76,7 @@ for f, route in enumerate(sol.routes):    # node-charge path of each vehicle
     print(f, route, "charges at", sol.charging_station(f))
 ```
 
-Indices are 0-based. Zones are `0..N-1` and charge levels are `0..H-1`, where level `h` means "at least the (h+1)-th charge band" (e.g. with H = 4, level 0 = 20%+ and level 3 = 80%+). A vehicle at level `h` can serve any customer requesting level `g ≤ h`.
+Indices are 0-based. Zones are `0..N-1` and charge levels are `0..H-1`, where level `h` means "at least the (h+1)-th charge band" (e.g. with H = 4, level 0 = 20%+ and level 3 = 80%+). A vehicle at level `h` can serve any request that needs level `g ≤ h`.
 
 **Inputs**
 
@@ -94,7 +96,7 @@ Indices are 0-based. Zones are `0..N-1` and charge levels are `0..H-1`, where le
 
 `examples/random_instance.py` solves one rebalancing interval on a random 10-zone, 5-level instance with the settings in Table 1 of the paper:
 
-- B = 0.4|N| = 4 idle EVs and |J| = 0.1|N| = 1 charging station with u<sub>j</sub> = B/|J|
+- B = 0.4|N| = 4 idle vehicles and |J| = 0.1|N| = 1 charging station with u<sub>j</sub> = B/|J|
 - λ ~ U[0,1], θ = 0.02, C = 3, η = 0.95, b = 0 (which gives ρ = 0.2236, 0.6416, 1.1576, as in Table 1)
 - μ = 1.5 Σλ
 
