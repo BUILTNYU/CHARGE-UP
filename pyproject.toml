@@ -3,9 +3,9 @@ requires = ["setuptools>=61"]
 build-backend = "setuptools.build_meta"
 
 [project]
-name = "nodecharge"
+name = "charge-up"
 version = "0.1.0"
-description = "Node-charge graph-based online carshare rebalancing with capacitated EV charging (Pantelidis et al., 2022)"
+description = "CHARGE-UP: node-charge graph-based online carshare rebalancing with capacitated EV charging (Pantelidis et al., 2022)"
 readme = "README.md"
 requires-python = ">=3.9"
 dependencies = ["numpy>=1.22", "scipy>=1.9"]
