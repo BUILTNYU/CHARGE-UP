@@ -1,6 +1,8 @@
-# Node-Charge EV Carshare Rebalancing
+# CHARGE-UP
 
-A Python implementation of the non-myopic rebalancing policy for one-way electric-vehicle (EV) carsharing fleets proposed in:
+**C**arshare **H**ierarchical **A**llocation and **R**ebalancing with **G**raph-**E**xpanded charging, **U**sing **P**-median
+
+CHARGE-UP is a Python implementation of the non-myopic rebalancing policy for one-way electric-vehicle (EV) carsharing fleets proposed in:
 
 > Pantelidis, T.P., Li, L., Ma, T.-Y., Chow, J.Y.J., & Jabari, S.E.G. (2022). A Node-Charge Graph-Based Online Carshare Rebalancing Policy with Capacitated Electric Charging. *Transportation Science* 56(3), 654–676. https://doi.org/10.1287/trsc.2021.1058
 
@@ -30,10 +32,12 @@ The code is written in Python (≥ 3.9) and needs only NumPy and SciPy. The exac
 ## Installation
 
 ```bash
-git clone https://github.com/BUILTNYU/NodeChargeEVRebalancing.git
-cd NodeChargeEVRebalancing
+git clone https://github.com/BUILTNYU/CHARGE-UP.git
+cd CHARGE-UP
 pip install -r requirements.txt          # numpy, scipy (+ matplotlib for plots)
 ```
+
+The Python package itself is imported as `nodecharge`. You can also install it with `pip install .`, which registers it under the name `charge-up`.
 
 ## Quick start
 
@@ -179,7 +183,7 @@ tests/
 
 ## Citation
 
-If you use this code, please cite the paper:
+If you use CHARGE-UP, please cite the paper:
 
 ```bibtex
 @article{pantelidis2022nodecharge,
